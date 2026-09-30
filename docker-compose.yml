@@ -1,0 +1,26 @@
+# docker compose up --build   →  http://localhost:8000
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: drcv
+      POSTGRES_USER: drcv
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-drcv-local-only}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U drcv"]
+      interval: 3s
+      retries: 20
+  app:
+    build: .
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      DATABASE_URL: postgresql+psycopg://drcv:${POSTGRES_PASSWORD:-drcv-local-only}@db:5432/drcv
+      DRCV_SECRET_KEY: ${DRCV_SECRET_KEY:-}
+      DRCV_DATA_DIR: /data
+    volumes: [appdata:/data]
+    ports: ["8000:8000"]
+volumes:
+  pgdata:
+  appdata:

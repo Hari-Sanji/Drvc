@@ -1,0 +1,6 @@
+# OCR for images and scanned PDFs (no system install needed; models ship inside the wheels)
+pypdfium2>=4.20
+pyhanko>=0.21        # verifies PDF digital signatures offline (optional)
+rapidocr_onnxruntime==1.4.4; python_version < "3.13"
+rapidocr>=3.0; python_version >= "3.13"
+onnxruntime>=1.17; python_version >= "3.13"

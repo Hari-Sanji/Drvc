@@ -1,0 +1,10 @@
+RENT RECEIPT - JULY 2026
+SYNTHETIC DEMO DATA - fictional record for demonstration only
+
+Receipt No: RR-2026-0701
+Tenant: Arjun Prakash
+Landlord: Meena Sundaram
+Property Address: 14, Lake View Road, Coimbatore
+Monthly Rent: ₹18,000.00
+Payment Date: 03 July 2026
+Receipt Date: 05 July 2026

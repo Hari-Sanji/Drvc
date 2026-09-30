@@ -1,0 +1,13 @@
+RESIDENTIAL LEASE AGREEMENT
+SYNTHETIC DEMO DATA - fictional record for demonstration only
+
+Agreement Date: 20 May 2026
+Landlord: Meena Sundaram
+Tenant: Arjun Prakash
+Property Address: 14, Lake View Road, Coimbatore
+Monthly Rent: ₹18,000.00
+Security Deposit: ₹54,000.00
+Lease Start Date: 01 June 2026
+Lease Term: 11 months
+
+Signed by both parties at Coimbatore.

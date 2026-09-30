@@ -1,0 +1,21 @@
+WESTERN GHATS UNIVERSITY
+Student Records Portal - Academic Transcript (text export)
+SYNTHETIC DEMO DATA - fictional record for demonstration only
+
+Student Name: Rahul Kumar
+Register Number: WGU22CS054
+Date of Birth: 14/03/2004
+Programme: B.E. Computer Science and Engineering
+Period of Study: 2022 - 2026
+CGPA: 8.42
+Degree Conferred On: 12 September 2026
+Date of Issue: 15 September 2026
+Place: Coimbatore
+
+Semester Summary
+Semester I-II   : 44 credits, SGPA 8.10
+Semester III-IV : 46 credits, SGPA 8.35
+Semester V-VI   : 45 credits, SGPA 8.52
+Semester VII-VIII: 38 credits, SGPA 8.61
+
+This transcript was generated electronically by Western Ghats University.
