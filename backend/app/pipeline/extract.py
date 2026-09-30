@@ -4,9 +4,12 @@ Nothing here fabricates data: if a property cannot be read it is reported as not
 """
 import io
 import logging
+import os
 import threading
 import zipfile
 from datetime import datetime, timezone
+
+from .. import config
 
 log = logging.getLogger("drcv.extract")
 
@@ -344,13 +347,35 @@ def ocr_engine_name() -> str | None:
     return _ocr_name
 
 
+def _limit_onnx_memory():
+    """Keep ONNX Runtime's memory use small (matters on 512 MB hosts): no arena / memory-pattern caching."""
+    try:
+        import onnxruntime as ort
+        if getattr(ort, "_drcv_patched", False):
+            return
+        orig = ort.InferenceSession
+
+        class _Lean(orig):
+            def __init__(self, path_or_bytes, sess_options=None, *a, **k):
+                if sess_options is None:
+                    sess_options = ort.SessionOptions()
+                sess_options.enable_cpu_mem_arena = False
+                sess_options.enable_mem_pattern = False
+                super().__init__(path_or_bytes, sess_options, *a, **k)
+        ort.InferenceSession = _Lean
+        ort._drcv_patched = True
+    except Exception as e:  # pragma: no cover
+        log.info("Could not limit ONNX memory: %s", e)
+
+
 def _load_ocr():
     global _ocr_engine, _ocr_name
     if _ocr_name is not None:
         return
     try:
+        _limit_onnx_memory()
         from rapidocr_onnxruntime import RapidOCR
-        _ocr_engine = RapidOCR()
+        _ocr_engine = RapidOCR(intra_op_num_threads=1, inter_op_num_threads=1)
         _ocr_name = "RapidOCR (ONNX)"
         return
     except Exception as e:
@@ -408,7 +433,11 @@ def ocr_image(img) -> tuple[str, float | None]:
     if not _ocr_name:
         raise RuntimeError("No OCR engine installed")
     img = img.convert("RGB")
-    if max(img.size) < 1000:
+    cap = int(os.getenv("DRCV_OCR_MAX_SIDE", "0") or 0)   # e.g. 1000 on small hosts
+    if cap and max(img.size) > cap:
+        k = cap / max(img.size)
+        img = img.resize((int(img.width * k), int(img.height * k)))
+    if not cap and max(img.size) < 1000:
         scale = 1000 / max(img.size)
         img = img.resize((int(img.width * scale), int(img.height * scale)))
     with _ocr_lock:
@@ -443,9 +472,32 @@ def ocr_image(img) -> tuple[str, float | None]:
 
 
 # ------------------------------------------------------------------ text
+_DEMO_OCR_FILE = config.DEMO_FILES_DIR / "ocr_cache.json"
+_demo_ocr_cache = None
+
+
+def _demo_ocr_lookup(data: bytes):
+    """The bundled synthetic demo scans were OCR'd once with the same engine; identical bytes reuse that result.
+    This keeps first start-up light on small (512 MB) hosts. Any other file goes through the real OCR engine."""
+    global _demo_ocr_cache
+    if _demo_ocr_cache is None:
+        try:
+            import json
+            _demo_ocr_cache = json.loads(_DEMO_OCR_FILE.read_text(encoding="utf-8")) if _DEMO_OCR_FILE.exists() else {}
+        except Exception:
+            _demo_ocr_cache = {}
+    if not _demo_ocr_cache:
+        return None
+    import hashlib
+    return _demo_ocr_cache.get(hashlib.sha256(data).hexdigest())
+
+
 def extract_text(ext: str, data: bytes, ocr_enabled: bool = True) -> dict:
     """Returns {text, method, confidence, error, pages}."""
     out = {"text": "", "method": "none", "confidence": None, "error": None}
+    cached = _demo_ocr_lookup(data) if ext in (".pdf", ".jpg", ".jpeg", ".png") and ocr_enabled else None
+    if cached:
+        return dict(cached)
     try:
         if ext == ".txt":
             try:

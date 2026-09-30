@@ -1,0 +1,20 @@
+{
+ "bcb4f150c33468ea267ff5ef7dcc79fb7ebd2cb238fe172e66d9a4b873bf2f45": {
+  "text": "WESTERN GHATSUNIVERSITY\nSTUDENT IDENTITY CARD - Coimbatore Campus\nName: Rahul Kumar\nStudent IDNo: WGU22CS045\nDate of Birth: 14-03-2004\nProgramme: B.E. CSE\nBatch: 2022-2026\nDate of Issue: 01 Aug 2022\nValid Till: 31 Jul 2026\nSYNTHETICDEMODATA-fictionalidentitycard",
+  "method": "OCR (RapidOCR (ONNX))",
+  "confidence": 94.3,
+  "error": null
+ },
+ "0274473d9b8a9f4534eba30a3704f1779225bea21e12c2bba20b2ff924cededb": {
+  "text": "PAYMENT RECEIPT\nNilgiri Industrial Supplies Pvt Ltd-Coimbatore\nReceipt No: RCP-5531\nReceipt Date: 05/09/2026\nReceived From: Sreeram Textiles\nAgainst Invoice: INV-2026-1142\nAmount Received: Rs.1,45,800.00\nMode: Bank Transfer\nIssued By: Nilgiri Industrial Supplies Pvt Ltd\nSYNTHETICDEMODATA-scannedcopy ofa fictionalreceipt",
+  "method": "OCR (RapidOCR (ONNX)) on scanned PDF",
+  "confidence": 97.2,
+  "error": null
+ },
+ "5e9a10b99038ddba7deade096097c737b58f1ba9d7dcccfcdb7b1eac5048da55": {
+  "text": "FUNDTRANSFERCONFIRMATION\nKaveri Demo Bank-Internet Banking (synthetic)\nTransaction ID: TXN88213490\nTransaction Date: 12-09-2026 14:32\nRemitter: Sreeram Textiles\nBeneficiary: Nilgiri Industrial Supplies Pvt Ltd\nAmount: Rs.1,48,500.00\nRemarks: Payment for INV-2026-1142\nStatus: SUCCESS\nSYNTHETICDEMODATA-fictionalbankrecord",
+  "method": "OCR (RapidOCR (ONNX))",
+  "confidence": 97.0,
+  "error": null
+ }
+}
